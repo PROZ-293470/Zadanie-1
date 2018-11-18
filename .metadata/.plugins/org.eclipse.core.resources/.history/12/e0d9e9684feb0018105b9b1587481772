@@ -1,0 +1,219 @@
+package mvc.calc.controller;
+
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.TextField;
+import javafx.util.*;
+import mvc.calc.model.JShellModel;
+
+public class MainController {
+	JShellModel jshell = new JShellModel();
+
+	@FXML
+	private Button factorial;
+
+	@FXML
+	private Button squareroot;
+
+	@FXML
+	private Button power;
+
+	@FXML
+	private Button module;
+
+	@FXML
+	private Button cancelall;
+
+	@FXML
+	private Button cancel;
+
+	@FXML
+	private Button backspace;
+
+	@FXML
+	private Button divide;
+
+	@FXML
+	private Button seven;
+
+	@FXML
+	private Button eight;
+
+	@FXML
+	private Button nine;
+
+	@FXML
+	private Button multiply;
+
+	@FXML
+	private Button four;
+
+	@FXML
+	private Button five;
+
+	@FXML
+	private Button six;
+
+	@FXML
+	private Button minus;
+
+	@FXML
+	private Button one;
+
+	@FXML
+	private Button two;
+
+	@FXML
+	private Button three;
+
+	@FXML
+	private Button plus;
+
+	@FXML
+	private Button negative;
+
+	@FXML
+	private Button zero;
+
+	@FXML
+	private Button dott;
+
+	@FXML
+	private Button equal;
+
+	@FXML
+	private TextField textfield;
+
+	@FXML
+	void Backspace_action(ActionEvent event) {
+		if (textfield.getText().length() > 1)
+			textfield.deleteText((textfield.getText().length()) - 1, textfield.getText().length());
+		else
+			textfield.setText("0");
+	}
+
+	@FXML
+	void Cancel_action(ActionEvent event) {
+		textfield.setText("0");
+	}
+
+	@FXML
+	void Divide_action(ActionEvent event) {
+		textfield.appendText("/");
+	}
+
+	@FXML
+	void Dott_action(ActionEvent event) {
+		textfield.appendText(".");
+	}
+
+	@FXML
+	void Equal_action(ActionEvent event) {
+		if (jshell.jShellCalculation(textfield.getText()) != null)
+			textfield.setText(jshell.jShellCalculation(textfield.getText()));
+
+	}
+
+	@FXML
+	void Factorial_action(ActionEvent event) {
+		if (!(factorialFunction().equals("0")))
+			textfield.setText(factorialFunction());
+		// System.out.println(jshell.jShellCalculation(textfield.getText()));
+	}
+
+	@FXML
+	void Minus_action(ActionEvent event) {
+		if (textfield.getText().equals("0"))
+			textfield.setText("-");
+		else
+			textfield.appendText("-");
+	}
+
+	@FXML
+	void Module_action(ActionEvent event) {
+		if (Double.parseDouble(textfield.getText()) < 0)
+			textfield.deleteText(0, 1);
+	}
+
+	@FXML
+	void Multiply_action(ActionEvent event) {
+		textfield.appendText("*");
+	}
+
+	@FXML
+	void Negative_action(ActionEvent event) {
+		if (Double.parseDouble(textfield.getText()) > 0)
+			textfield.insertText(0, "-");
+		else if (Double.parseDouble(textfield.getText()) < 0)
+			textfield.deleteText(0, 1);
+	}
+
+	@FXML
+	void Number_action(ActionEvent event) {
+
+		if (textfield.getText().equals("0"))
+			textfield.setText(((Button) event.getSource()).getText());
+		else
+			textfield.appendText(((Button) event.getSource()).getText());
+	}
+
+	@FXML
+	void Plus_action(ActionEvent event) {
+		textfield.appendText("+");
+	}
+
+	@FXML
+	void Power_action(ActionEvent event) {
+		if (!(textfield.getText().equals("0")))
+			textfield.setText("Math.pow(" + textfield.getText() + ", 2)");
+	}
+
+	@FXML
+	void Square_Root_action(ActionEvent event) {
+		try {
+		if (Double.parseDouble(jshell.jShellCalculation(textfield.getText())) > 0)
+			textfield.setText("Math.sqrt(" + textfield.getText() + ")");
+		}catch(NumberFormatException e) {
+			Alert alert = new Alert(AlertType.WARNING, "Wpisz poprawne dane.", ButtonType.OK);
+			alert.setTitle("Uwaga!");
+			alert.setHeaderText("Liczba nie jest dodatnia - Nieprawidlowe dane.");
+			alert.showAndWait();
+		}
+	}
+
+	String factorialFunction() {
+		if (isPositiveInteger()) {
+			int out = 1;
+			for (int i = 1; i <= Integer.parseInt(jshell.jShellCalculation(textfield.getText())); i++) {
+				out = out * i;
+			}
+			return Integer.toString(out);
+		}
+		return "0";
+	}
+
+	boolean isPositiveInteger() {
+		try {
+			int number = Integer.parseInt(jshell.jShellCalculation(textfield.getText()));
+			if (number > 0)
+				return true;
+			else {
+				Alert alert = new Alert(AlertType.WARNING, "Wpisz poprawne dane.", ButtonType.OK);
+				alert.setTitle("Uwaga!");
+				alert.setHeaderText("Liczba nie jest dodatnia - Nieprawidlowe dane.");
+				alert.showAndWait();
+				return false;
+			}
+		} catch (NumberFormatException e) {
+			Alert alert = new Alert(AlertType.WARNING, "Wpisz poprawne dane.", ButtonType.OK);
+			alert.setTitle("Uwaga!");
+			alert.setHeaderText("Liczba nie jest naturalna - Nieprawidlowe dane.");
+			alert.showAndWait();
+			return false;
+		}
+	}
+}

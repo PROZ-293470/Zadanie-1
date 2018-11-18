@@ -1,0 +1,2 @@
+INDEX VERSION 1.131+C:\Users\Wojtek\PROZ\Zadanie-1\.metadata\.plugins\org.eclipse.jdt.core
+2441938283.index

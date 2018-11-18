@@ -1,0 +1,44 @@
+package mvc.calc.model;
+
+import java.util.List;
+
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
+import jdk.jshell.*;
+
+/**
+ * @author Wojtek Rokicki
+ * @version Alpha
+ * Klasa <code>JShellModel</code> implementuje obiekt typu <code>JShell</code>, ktory bedzie "delegowal" obliczenia do programy jshell.
+ */
+public class JShellModel {
+	JShell jshell = JShell.create();
+
+	/**
+	 * Metoda <code>jShellCalculation()</code> sluzy do obliczenia dzialania matematycznego przekazanego w argumencie funkcji (lancuch znakow) i powiadomienia w razie wystapienia jakichkolwiek bledow w <code>Alert</code>.
+	 * @param equation jako parametr nalezy przekazac ciag znakow reprezentujacy dzialanie matematyczne, interpretowalne przez jshell'a
+	 * @return zwraca wynik obliczen wykonanych przez program jshell
+	 */
+	public String jShellCalculation(String equation) {
+		List<SnippetEvent> events = jshell.eval(equation);
+		if (events.get(0).causeSnippet() == null) {
+			switch (events.get(0).status()) {
+			case VALID:
+				if (events.get(0).value() != null) {
+					System.out.printf("%s = %s\n", equation, events.get(0).value());
+				}
+				break;
+			default:
+				System.out.printf("Error\n");
+				Alert alert = new Alert( AlertType.WARNING,"Wpisz poprawne dane." , ButtonType.OK );
+				alert.setTitle("Uwaga!");
+				alert.setHeaderText("Blad w obliczeniach JShell - Nieprawidlowe dane.");
+				alert.showAndWait();
+				break;
+			}
+		}
+		return (String)events.get(0).value();
+	}
+	
+}

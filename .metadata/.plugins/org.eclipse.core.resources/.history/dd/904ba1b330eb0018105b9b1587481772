@@ -1,0 +1,25 @@
+package mvc.calc.model;
+
+import jdk.jshell.*;
+
+public class JShellModel {
+	JShell jshell = JShell.create();
+
+	String jShellCalculation(String equation) {
+		SnippetEvent event = (SnippetEvent) jshell.eval(equation);
+		if (event.causeSnippet() == null) {
+			switch (event.status()) {
+			case VALID:
+				if (event.value() != null) {
+					System.out.printf("%s = %s\n", equation, event.value());
+				}
+				break;
+			default:
+				System.out.printf("Error\n");
+				break;
+			}
+		}
+		return (String)event.value();
+	}
+	
+}
